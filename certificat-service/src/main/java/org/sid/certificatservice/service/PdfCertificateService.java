@@ -1,9 +1,13 @@
 package org.sid.certificatservice.service;
 
 import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+import org.sid.certificatservice.exception.PdfGenerationException;
 import org.springframework.stereotype.Service;
+import org.sid.certificatservice.exception.PdfGenerationException;
+
 
 import java.io.ByteArrayOutputStream;
 
@@ -11,9 +15,10 @@ import java.io.ByteArrayOutputStream;
 public class PdfCertificateService {
 
     public byte[] generateCertificate(String studentName, String courseTitle) {
+        Document document = new Document();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
         try {
-            Document document = new Document();
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
             PdfWriter.getInstance(document, out);
             document.open();
 
@@ -24,10 +29,12 @@ public class PdfCertificateService {
 
             document.close();
             return out.toByteArray();
-        } catch (Exception e) {
-            throw new RuntimeException("Erreur lors de la génération du PDF", e);
+
+        } catch (DocumentException e) {
+            throw new PdfGenerationException(
+                    "Erreur lors de la génération du certificat PDF",
+                    e
+            );
         }
     }
 }
-
-

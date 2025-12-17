@@ -1,4 +1,7 @@
 package org.sid.certificatservice.exception;
 
-public class PdfGenerationException {
+public class PdfGenerationException extends RuntimeException {
+    public PdfGenerationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
